@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIGANG Ethnic Guwahati | Assamese Dining Experience</title>
+    <meta name="description" content="Discover LIGANG Ethnic Guwahati — an immersive dining experience inspired by the flavours and culture of Assam.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --bg-base: #080706;
+            --bg-surface: #0D0B09;
+            --bg-elevated: #13100D;
+            --text-primary: #F4EFE6;
+            --text-secondary: #B9B0A3;
+            --gold: #C9A86A;
+            --border-subtle: #1f1b17;
+            --border-accent: #2e2821;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Hide default cursor on desktop where custom cursor is active */
+        @media (pointer: fine) {
+            body { cursor: none; }
+        }
+
+        h1, h2, h3, h4, h5, h6, .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Premium Custom Cursor */
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background-color: var(--gold);
+            border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 9999;
+            transition: transform 0.15s ease-out, background-color 0.2s, width 0.2s, height 0.2s;
+            box-shadow: 0 0 15px rgba(201, 168, 106, 0.6);
+        }
+        
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(201, 168, 106, 0.4);
+            border-radius: 50%;
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 9998;
+            transition: transform 0.1s ease-out, width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, background-color 0.3s;
+        }
+
+        body.cursor-hover .cursor-dot {
+            transform: translate(-50%, -50%) scale(0.1);
+            background-color: transparent; box-shadow: none;
+        }
+        
+        body.cursor-hover .cursor-outline {
+            width: 70px; height: 70px;
+            border-color: var(--gold);
+            background-color: rgba(201, 168, 106, 0.08);
+            backdrop-filter: grayscale(20%);
+        }
+
+        /* Design System Classes */
+        .solid-nav {
+            background-color: var(--bg-base);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .solid-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            transition: border-color 0.4s ease;
+        }
+        .solid-card:hover { border-color: var(--border-accent); }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 8vw, 8.5rem);
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+        }
+
+        /* 3D Tilt Logic */
+        .perspective-container { perspective: 1200px; }
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            will-change: transform;
+        }
+        .tilt-content { transform: translateZ(30px); }
+        .tilt-image {
+            transform: translateZ(80px);
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.9));
+            transition: transform 0.4s ease;
+        }
+        .tilt-card:hover .tilt-image { transform: translateZ(100px) scale(1.05); }
+
+        /* Marquee */
+        .marquee-container {
+            overflow: hidden; white-space: nowrap;
+            display: flex; width: 100%;
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+            background-color: var(--bg-surface);
+        }
+        .marquee-content {
+            display: flex; animation: marquee 35s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.15s; }
+        .reveal-delay-2 { transition-delay: 0.3s; }
+
+        .menu-row {
+            border-bottom: 1px solid var(--border-subtle);
+            transition: all 0.4s ease;
+        }
+        .menu-row:hover { border-bottom-color: var(--gold); }
+
+        /* --- Customer Feedback Section --- */
+        .feedback-section {
+            padding: 120px 0;
+            background-color: var(--bg-base);
+            overflow: hidden;
+            border-top: 1px solid var(--border-subtle);
+        }
+        .feedback-section .section-header { text-align: center; margin-bottom: 60px; }
+        .marquee-wrapper {
+            width: 100vw; max-width: 100%;
+            overflow: hidden; position: relative; display: flex;
+        }
+        .marquee-wrapper::before, .marquee-wrapper::after {
+            content: ''; position: absolute; top: 0;
+            width: 15vw; height: 100%; z-index: 2; pointer-events: none;
+        }
+        .marquee-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-base) 0%, transparent 100%); }
+        .marquee-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg-base) 0%, transparent 100%); }
+        .marquee-track {
+            display: flex; gap: 30px; padding: 20px 0;
+            width: max-content; animation: scrollFeedbackMarquee 40s linear infinite;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+        .feedback-card {
+            width: 350px; background-color: var(--bg-elevated);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px; display: flex; flex-direction: column; justify-content: space-between;
+            transition: transform 0.4s ease, border-color 0.4s ease; flex-shrink: 0; cursor: pointer;
+        }
+        .feedback-card:hover { border-color: var(--gold); }
+        .stars { color: var(--gold); font-size: 18px; letter-spacing: 2px; margin-bottom: 20px; }
+        .quote {
+            font-family: var(--font-display); font-size: 20px;
+            color: var(--text-primary); line-height: 1.4; margin-bottom: 30px; font-style: italic;
+        }
+        .customer-meta {
+            display: flex; align-items: center; gap: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 20px;
+        }
+        .cust-avatar {
+            width: 50px; height: 50px; border-radius: 50%;
+            object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--bg-base);
+        }
+        .cust-name {
+            font-family: var(--font-ui); font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px;
+        }
+        @keyframes scrollFeedbackMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 15px)); }
+        }
+
+        /* --- Mobile Floating Bottom Navigation (Glassmorphism) --- */
+        .mobile-bottom-nav {
+            display: none; position: fixed; bottom: 24px; left: 50%;
+            transform: translateX(-50%); width: 90%; max-width: 400px;
+            background: rgba(8, 7, 6, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px;
+            z-index: 9999; padding: 12px 24px; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: var(--text-secondary); text-decoration: none; background: none; border: none;
+            font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+            opacity: 0.7; transition: opacity 0.3s, color 0.3s; cursor: pointer;
+        }
+        .nav-item.reserve-icon { color: var(--gold); opacity: 1; }
+        .nav-item svg { width: 22px; height: 22px; }
+        .nav-item:hover, .nav-item:active { opacity: 1; color: var(--text-primary); }
+
+        .bottom-sheet {
+            display: none; position: fixed; bottom: -100%; left: 0; width: 100%;
+            background: rgba(13, 11, 9, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08); border-radius: 30px 30px 0 0;
+            z-index: 9998; padding: 20px 30px 100px 30px; 
+            transition: bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
+        }
+        .bottom-sheet.active { bottom: 0; }
+        .sheet-handle {
+            width: 40px; height: 4px; background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px; margin: 0 auto 30px auto;
+        }
+        .sheet-links { display: flex; flex-direction: column; gap: 20px; }
+        .sheet-links a {
+            color: var(--text-primary); text-decoration: none; font-size: 16px;
+            text-transform: uppercase; letter-spacing: 2px; padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .cursor-dot, .cursor-outline { display: none !important; }
+            .tilt-card { transform: none !important; transition: none; }
+            .tilt-content, .tilt-image { transform: none !important; filter: none; }
+            
+            .feedback-card { width: 280px; padding: 30px; }
+            .quote { font-size: 16px; }
+            
+            .mobile-bottom-nav { display: flex; }
+            .bottom-sheet { display: block; }
+            header .nav-links { display: none; }
+            
+            /* Add padding to footer so floating nav doesn't cover content */
+            footer { padding-bottom: 120px !important; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-[#C9A86A] selection:text-[#080706]">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <nav class="fixed w-full top-0 z-50 solid-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="#" class="flex flex-col hover-target cursor-pointer">
+                <span class="font-display text-2xl tracking-widest text-[#F4EFE6]">LIGANG</span>
+                <span class="text-[9px] tracking-[0.4em] text-[#C9A86A] uppercase mt-1">Ethnic Guwahati</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-12 text-[11px] uppercase tracking-[0.2em] text-[#B9B0A3]">
+                <a href="#story" class="hover:text-[#F4EFE6] transition-colors hover-target">Story</a>
+                <a href="#experience" class="hover:text-[#F4EFE6] transition-colors hover-target">Experience</a>
+                <a href="#menu" class="hover:text-[#F4EFE6] transition-colors hover-target">Menu</a>
+                <a href="#feedback" class="hover:text-[#F4EFE6] transition-colors hover-target">Feedback</a>
+                <a href="#location" class="hover:text-[#F4EFE6] transition-colors hover-target">Location</a>
+            </div>
+
+            <div class="hidden md:block">
+                <a href="https://www.google.com/maps/reserve/v/dine/c/bE1r9dHQ7-w?source=pa&opi=79508299&hl=en-IN&gei=yqfAavKnHMWv4-EPv7qYsQU&ahbb=1" 
+                   target="_blank" rel="noopener noreferrer" 
+                   class="inline-block border border-[#C9A86A] text-[#C9A86A] px-7 py-3 text-[11px] uppercase tracking-[0.2em] hover:bg-[#C9A86A] hover:text-[#080706] transition-colors duration-400 hover-target">
+                    Reserve
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden text-[#F4EFE6] focus:outline-none hover-target" id="mobile-menu-btn">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-[#080706] z-40 hidden flex-col items-center justify-center space-y-10 pt-10 transition-opacity opacity-0">
+            <a href="#story" class="font-display text-4xl hover:text-[#C9A86A] transition-colors mobile-link">Story</a>
+            <a href="#experience" class="font-display text-4xl hover:text-[#C9A86A] transition-colors mobile-link">Experience</a>
+            <a href="#menu" class="font-display text-4xl hover:text-[#C9A86A] transition-colors mobile-link">Menu</a>
+            <a href="#feedback" class="font-display text-4xl hover:text-[#C9A86A] transition-colors mobile-link">Feedback</a>
+            <a href="#location" class="font-display text-4xl hover:text-[#C9A86A] transition-colors mobile-link">Location</a>
+            <a href="https://www.google.com/maps/reserve/v/dine/c/bE1r9dHQ7-w?source=pa&opi=79508299&hl=en-IN&gei=yqfAavKnHMWv4-EPv7qYsQU&ahbb=1" 
+                target="_blank" rel="noopener noreferrer" 
+                class="mt-8 border border-[#C9A86A] text-[#C9A86A] px-8 py-4 text-xs tracking-[0.2em] uppercase mobile-link">
+                Reserve a Table
+            </a>
+            <button id="close-menu-btn" class="absolute top-6 right-6 p-2 text-[#B9B0A3]">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <section class="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden perspective-container">
+        <div class="max-w-7xl mx-auto px-6 w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Text -->
+            <div class="lg:col-span-7 flex flex-col items-start z-20 reveal">
+                <p class="text-[#C9A86A] text-[10px] tracking-[0.3em] uppercase mb-6 mt-10 lg:mt-0">Assamese Fine Dining</p>
+                <h1 class="hero-title font-display text-[#F4EFE6]">LIGANG</h1>
+                <p class="font-display text-3xl md:text-5xl text-[#B9B0A3] italic mt-2 opacity-80">
+                    A taste of Assam.
+                </p>
+                <div class="mt-12 flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                    <a href="https://www.google.com/maps/reserve/v/dine/c/bE1r9dHQ7-w?source=pa&opi=79508299&hl=en-IN&gei=yqfAavKnHMWv4-EPv7qYsQU&ahbb=1" 
+                       target="_blank" rel="noopener noreferrer" 
+                       class="bg-[#F4EFE6] text-[#080706] px-8 py-4 text-[11px] tracking-[0.2em] uppercase hover:bg-[#C9A86A] transition-colors duration-400 hover-target font-medium">
+                        Reserve a Table
+                    </a>
+                    <a href="#experience" class="text-[#B9B0A3] text-[11px] tracking-[0.2em] uppercase hover:text-[#C9A86A] transition-colors hover-target flex items-center gap-2">
+                        Explore Experience <span class="text-[#C9A86A]">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right 3D Hero Element with dish1 -->
+            <div class="lg:col-span-5 h-[45vh] lg:h-[70vh] flex items-center justify-center relative z-10 perspective-container hover-target">
+                <div class="tilt-card w-full max-w-[450px] aspect-[3/4] relative flex items-center justify-center cursor-none">
+                    <div class="absolute inset-0 bg-[#0D0B09] border border-[#1f1b17] rounded-sm tilt-content overflow-hidden shadow-2xl">
+                        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#C9A86A] to-transparent mix-blend-overlay"></div>
+                    </div>
+                    <img src="dish1.png" alt="Signature Assamese Thali" class="w-[120%] max-w-[120%] object-contain tilt-image absolute z-20 pointer-events-none drop-shadow-[0_40px_50px_rgba(0,0,0,1)]">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-4 bg-[#080706]">
+        <div class="marquee-container font-display text-2xl md:text-3xl italic text-[#B9B0A3] tracking-widest opacity-60">
+            <div class="marquee-content hover-target">
+                <span class="px-8">ASSAM • CULTURE • FLAVOUR • HERITAGE • EXPERIENCE • </span>
+                <span class="px-8">ASSAM • CULTURE • FLAVOUR • HERITAGE • EXPERIENCE • </span>
+                <span class="px-8">ASSAM • CULTURE • FLAVOUR • HERITAGE • EXPERIENCE • </span>
+                <span class="px-8">ASSAM • CULTURE • FLAVOUR • HERITAGE • EXPERIENCE • </span>
+            </div>
+        </div>
+    </section>
+
+    <section id="story" class="py-24 lg:py-40 bg-[#080706] relative">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <div class="order-2 lg:order-1 relative reveal">
+                <div class="bg-[#0D0B09] p-3 border border-[#1f1b17] hover-target group">
+                    <div class="overflow-hidden bg-[#080706] relative">
+                        <img src="restraunt.png" alt="LIGANG Restaurant Atmosphere" class="w-full aspect-[4/5] object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#080706] via-transparent to-transparent opacity-60 pointer-events-none"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-1 lg:order-2 reveal reveal-delay-1 flex flex-col justify-center">
+                <span class="text-[#C9A86A] text-[10px] tracking-[0.3em] uppercase mb-8">The Heritage</span>
+                <h2 class="font-display text-4xl lg:text-6xl mb-10 leading-[1.1] text-[#F4EFE6]">
+                    Rooted in Assam.<br>
+                    <span class="text-[#B9B0A3] italic">Made for the moment.</span>
+                </h2>
+                <div class="space-y-6 text-[#B9B0A3] text-sm md:text-base font-light leading-relaxed max-w-lg">
+                    <p>At LIGANG, we honor the profound culinary heritage of Assam. Our approach strips away the unnecessary, leaving only the pure, bold flavors that define our ethnic roots within a contemporary, refined atmosphere.</p>
+                    <p>Every ingredient is meticulously sourced from local artisans, and every technique respects the generations before us. This is an authentic dining experience presented with uncompromising elegance and spatial minimalism.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="py-24 lg:py-40 bg-[#0D0B09] border-t border-b border-[#1f1b17] relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 lg:mb-24 reveal">
+                <div>
+                    <span class="text-[#C9A86A] text-[10px] tracking-[0.3em] uppercase mb-4 block">The Collection</span>
+                    <h2 class="font-display text-4xl lg:text-6xl text-[#F4EFE6]">Signature Thalis</h2>
+                </div>
+                <p class="text-[#B9B0A3] max-w-sm text-sm font-light leading-relaxed mt-6 md:mt-0 pb-2">
+                    A curated selection of our finest ethnic preparations, presented as complete culinary narratives.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 perspective-container">
+                <!-- Card 1 -->
+                <div class="tilt-card solid-card p-6 lg:p-8 reveal hover-target flex flex-col items-center group cursor-none relative h-[450px] lg:h-[520px]">
+                    <div class="flex-1 w-full flex items-center justify-center relative perspective-container">
+                        <img src="dish1.png" alt="Signature Assamese Thali" class="tilt-image w-[90%] lg:w-[95%] object-contain z-10">
+                    </div>
+                    <div class="tilt-content text-center w-full mt-6 lg:mt-8 border-t border-[#1f1b17] pt-6 relative z-20 bg-[#0D0B09]">
+                        <p class="text-[#C9A86A] text-[9px] uppercase tracking-[0.2em] mb-2">01</p>
+                        <h3 class="font-display text-xl lg:text-2xl text-[#F4EFE6] mb-2">Signature Assamese Thali</h3>
+                        <p class="text-[#B9B0A3] text-xs font-light tracking-wide">₹ 850</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="tilt-card solid-card p-6 lg:p-8 reveal reveal-delay-1 hover-target flex flex-col items-center group cursor-none relative h-[450px] lg:h-[520px]">
+                    <div class="flex-1 w-full flex items-center justify-center relative perspective-container">
+                        <img src="dish2.png" alt="Heritage Pork Thali" class="tilt-image w-[90%] lg:w-[95%] object-contain z-10">
+                    </div>
+                    <div class="tilt-content text-center w-full mt-6 lg:mt-8 border-t border-[#1f1b17] pt-6 relative z-20 bg-[#0D0B09]">
+                        <p class="text-[#C9A86A] text-[9px] uppercase tracking-[0.2em] mb-2">02</p>
+                        <h3 class="font-display text-xl lg:text-2xl text-[#F4EFE6] mb-2">Heritage Pork Thali</h3>
+                        <p class="text-[#B9B0A3] text-xs font-light tracking-wide">₹ 950</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="tilt-card solid-card p-6 lg:p-8 reveal reveal-delay-2 hover-target flex flex-col items-center group cursor-none relative h-[450px] lg:h-[520px]">
+                    <div class="flex-1 w-full flex items-center justify-center relative perspective-container">
+                        <img src="dish3.png" alt="Traditional Smoked Chicken Thali" class="tilt-image w-[90%] lg:w-[95%] object-contain z-10">
+                    </div>
+                    <div class="tilt-content text-center w-full mt-6 lg:mt-8 border-t border-[#1f1b17] pt-6 relative z-20 bg-[#0D0B09]">
+                        <p class="text-[#C9A86A] text-[9px] uppercase tracking-[0.2em] mb-2">03</p>
+                        <h3 class="font-display text-xl lg:text-2xl text-[#F4EFE6] mb-2">Smoked Chicken Thali</h3>
+                        <p class="text-[#B9B0A3] text-xs font-light tracking-wide">₹ 750</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="py-24 lg:py-40 bg-[#080706]">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="font-display text-4xl lg:text-6xl mb-16 lg:mb-24 reveal text-[#F4EFE6]">Curated Selections</h2>
+            
+            <div class="space-y-4">
+                <div class="menu-row py-6 lg:py-8 flex flex-col md:flex-row justify-between items-start md:items-center reveal hover-target group">
+                    <div class="flex items-start gap-6 lg:gap-12">
+                        <span class="text-[#C9A86A] text-sm tracking-[0.2em] mt-1 group-hover:opacity-100 opacity-50 transition-opacity">01</span>
+                        <div>
+                            <h3 class="font-display text-2xl lg:text-3xl mb-3 text-[#F4EFE6]">Pigeon Meat Curry</h3>
+                            <p class="text-[#B9B0A3] text-sm font-light max-w-md">Exotic local delicacy prepared with freshly ground black pepper and traditional ethnic herbs.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 md:ml-4 text-sm tracking-[0.2em] text-[#C9A86A] self-end md:self-auto">₹ 700</div>
+                </div>
+
+                <div class="menu-row py-6 lg:py-8 flex flex-col md:flex-row justify-between items-start md:items-center reveal hover-target group">
+                    <div class="flex items-start gap-6 lg:gap-12">
+                        <span class="text-[#C9A86A] text-sm tracking-[0.2em] mt-1 group-hover:opacity-100 opacity-50 transition-opacity">02</span>
+                        <div>
+                            <h3 class="font-display text-2xl lg:text-3xl mb-3 text-[#F4EFE6]">Khorisa Aru Gahori</h3>
+                            <p class="text-[#B9B0A3] text-sm font-light max-w-md">Fermented bamboo shoot paired with succulent wood-smoked pork cubes.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 md:ml-4 text-sm tracking-[0.2em] text-[#C9A86A] self-end md:self-auto">₹ 550</div>
+                </div>
+
+                <div class="menu-row py-6 lg:py-8 flex flex-col md:flex-row justify-between items-start md:items-center reveal hover-target group">
+                    <div class="flex items-start gap-6 lg:gap-12">
+                        <span class="text-[#C9A86A] text-sm tracking-[0.2em] mt-1 group-hover:opacity-100 opacity-50 transition-opacity">03</span>
+                        <div>
+                            <h3 class="font-display text-2xl lg:text-3xl mb-3 text-[#F4EFE6]">Masor Tenga</h3>
+                            <p class="text-[#B9B0A3] text-sm font-light max-w-md">A light, refreshing, sour fish curry prepared with indigenous elephant apple and tomatoes.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 md:ml-4 text-sm tracking-[0.2em] text-[#C9A86A] self-end md:self-auto">₹ 480</div>
+                </div>
+            </div>
+            
+            <div class="mt-16 lg:mt-20 reveal text-center md:text-left">
+                <button class="text-[#F4EFE6] uppercase tracking-[0.2em] text-[11px] border-b border-[#F4EFE6] pb-2 hover:text-[#C9A86A] hover:border-[#C9A86A] transition-colors hover-target">
+                    View Complete Menu
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback / Testimonials Section -->
+    <section id="feedback" class="feedback-section perspective-container">
+        <div class="section-header reveal">
+            <h2 class="font-display text-4xl lg:text-6xl text-[#F4EFE6] mb-4">Guest Experiences</h2>
+            <p class="text-[#B9B0A3] font-light text-sm tracking-wide">What people say about LIGANG</p>
+        </div>
+
+        <div class="marquee-wrapper reveal hover-target cursor-none">
+            <div class="marquee-track">
+                <!-- Box 1 -->
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"An absolute revelation. The authentic flavors of Assam presented with unmatched elegance. A true premium dining experience."</p>
+                    <div class="customer-meta">
+                        <img src="cust1.png" alt="Customer 1" class="cust-avatar">
+                        <span class="cust-name">Aarav M.</span>
+                    </div>
+                </div>
+                <!-- Box 2 -->
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"The ambiance is exactly what Guwahati needed. Sophisticated, dark, and intimate. The signature pork dish is outstanding."</p>
+                    <div class="customer-meta">
+                        <img src="cust2.png" alt="Customer 2" class="cust-avatar">
+                        <span class="cust-name">Priya S.</span>
+                    </div>
+                </div>
+                <!-- Box 3 -->
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"World-class hospitality. From the moment you walk in, the attention to detail is staggering. Highly recommended."</p>
+                    <div class="customer-meta">
+                        <img src="cust3.png" alt="Customer 3" class="cust-avatar">
+                        <span class="cust-name">Rohan B.</span>
+                    </div>
+                </div>
+                <!-- Box 4 -->
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"Beautiful plating and extraordinary taste. It’s rare to see ethnic cuisine elevated to this level of fine dining."</p>
+                    <div class="customer-meta">
+                        <img src="cust4.png" alt="Customer 4" class="cust-avatar">
+                        <span class="cust-name">Neha K.</span>
+                    </div>
+                </div>
+                <!-- Box 5 -->
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"Perfect for special occasions. The dark luxury aesthetic combined with traditional roots makes LIGANG unforgettable."</p>
+                    <div class="customer-meta">
+                        <img src="cust5.png" alt="Customer 5" class="cust-avatar">
+                        <span class="cust-name">Vikram T.</span>
+                    </div>
+                </div>
+
+                <!-- DUPLICATE SET FOR SEAMLESS INFINITE SCROLL -->
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"An absolute revelation. The authentic flavors of Assam presented with unmatched elegance. A true premium dining experience."</p>
+                    <div class="customer-meta">
+                        <img src="cust1.png" alt="Customer 1" class="cust-avatar">
+                        <span class="cust-name">Aarav M.</span>
+                    </div>
+                </div>
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"The ambiance is exactly what Guwahati needed. Sophisticated, dark, and intimate. The signature pork dish is outstanding."</p>
+                    <div class="customer-meta">
+                        <img src="cust2.png" alt="Customer 2" class="cust-avatar">
+                        <span class="cust-name">Priya S.</span>
+                    </div>
+                </div>
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"World-class hospitality. From the moment you walk in, the attention to detail is staggering. Highly recommended."</p>
+                    <div class="customer-meta">
+                        <img src="cust3.png" alt="Customer 3" class="cust-avatar">
+                        <span class="cust-name">Rohan B.</span>
+                    </div>
+                </div>
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"Beautiful plating and extraordinary taste. It’s rare to see ethnic cuisine elevated to this level of fine dining."</p>
+                    <div class="customer-meta">
+                        <img src="cust4.png" alt="Customer 4" class="cust-avatar">
+                        <span class="cust-name">Neha K.</span>
+                    </div>
+                </div>
+                <div class="feedback-card tilt-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="quote">"Perfect for special occasions. The dark luxury aesthetic combined with traditional roots makes LIGANG unforgettable."</p>
+                    <div class="customer-meta">
+                        <img src="cust5.png" alt="Customer 5" class="cust-avatar">
+                        <span class="cust-name">Vikram T.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="py-24 lg:py-40 bg-[#0D0B09] border-t border-[#1f1b17] relative">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            <div class="reveal">
+                <span class="text-[#C9A86A] text-[10px] tracking-[0.3em] uppercase mb-6 block">Location</span>
+                <h2 class="font-display text-4xl lg:text-6xl text-[#F4EFE6] mb-8">Find the Experience.</h2>
+                
+                <div class="mt-12 space-y-8 text-[#B9B0A3] font-light text-sm leading-relaxed">
+                    <div>
+                        <p class="text-[#F4EFE6] font-medium tracking-wide mb-2 uppercase text-xs">Address</p>
+                        <p>149, RG Baruah Rd,<br>Rajdhani Nursery, Sree Nagar,<br>Guwahati, Assam 781005</p>
+                    </div>
+                    <div>
+                        <p class="text-[#F4EFE6] font-medium tracking-wide mb-2 uppercase text-xs">Hours</p>
+                        <p>Open Daily — Until 10:30 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="solid-card p-1 relative overflow-hidden reveal reveal-delay-1 hover-target group aspect-square lg:aspect-auto lg:h-[500px] flex items-center justify-center bg-[#080706]">
+                <div class="absolute inset-0 bg-[#0D0B09] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
+                <div class="absolute inset-0 z-0" style="background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 40px 40px;"></div>
+                <div class="text-center z-20 p-8 bg-[#080706] border border-[#1f1b17] shadow-2xl">
+                    <h3 class="font-display text-2xl text-[#F4EFE6] mb-2">LIGANG</h3>
+                    <p class="text-[10px] text-[#B9B0A3] tracking-[0.2em] uppercase mb-8">Guwahati, Assam</p>
+                    <a href="https://maps.app.goo.gl/BkwcPvhHzSRrAnYdA" target="_blank" class="inline-flex items-center justify-center border border-[#C9A86A] text-[#C9A86A] px-8 py-4 text-[11px] uppercase tracking-[0.2em] hover:bg-[#C9A86A] hover:text-[#080706] transition-colors duration-400 hover-target">
+                        Open in Google Maps 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reservation" class="py-24 lg:py-40 bg-[#080706] border-t border-[#1f1b17] text-center reveal flex flex-col items-center">
+        <h2 class="font-display text-5xl lg:text-8xl mb-6 lg:mb-8 text-[#F4EFE6]">Reserve a Table.</h2>
+        <p class="text-[#B9B0A3] font-light mb-12 lg:mb-16 max-w-md mx-auto px-4">Immerse yourself in a luxurious ethnic dining environment.</p>
+        
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 lg:gap-6 w-full px-6 lg:px-0">
+            <a href="https://www.google.com/maps/reserve/v/dine/c/bE1r9dHQ7-w?source=pa&opi=79508299&hl=en-IN&gei=yqfAavKnHMWv4-EPv7qYsQU&ahbb=1" 
+               target="_blank" rel="noopener noreferrer" 
+               class="bg-[#F4EFE6] text-[#080706] px-12 py-5 text-[11px] tracking-[0.2em] uppercase hover:bg-[#C9A86A] transition-colors duration-400 hover-target font-medium inline-block w-full sm:w-auto">
+                Book a Table
+            </a>
+            <a href="tel:07002478916" class="px-12 py-5 text-[11px] tracking-[0.2em] uppercase border border-[#1f1b17] text-[#B9B0A3] hover:border-[#C9A86A] hover:text-[#C9A86A] transition-colors duration-400 hover-target inline-block w-full sm:w-auto">
+                Call: 070024 78916
+            </a>
+        </div>
+    </section>
+
+    <footer class="py-12 border-t border-[#1f1b17] bg-[#0D0B09]">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <span class="font-display text-2xl tracking-widest text-[#F4EFE6]">LIGANG</span>
+                <p class="text-[9px] tracking-[0.3em] text-[#B9B0A3] uppercase mt-2">Premium Ethnic Dining</p>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-6 lg:gap-10 text-[#B9B0A3] text-[10px] uppercase tracking-[0.2em]">
+                <a href="#story" class="hover:text-[#F4EFE6] hover-target transition-colors">Story</a>
+                <a href="#experience" class="hover:text-[#F4EFE6] hover-target transition-colors">Experience</a>
+                <a href="#menu" class="hover:text-[#F4EFE6] hover-target transition-colors">Menu</a>
+                <a href="#location" class="hover:text-[#F4EFE6] hover-target transition-colors">Location</a>
+            </div>
+            
+            <div class="text-[#B9B0A3] text-[10px] uppercase tracking-[0.1em] font-light">
+                &copy; <span id="year"></span> LIGANG.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Floating Glass Bottom Nav -->
+    <nav class="mobile-bottom-nav">
+        <a href="#story" class="nav-item hover-target">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span>Story</span>
+        </a>
+        <a href="#menu" class="nav-item hover-target">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span>Menu</span>
+        </a>
+        <a href="https://www.google.com/maps/reserve/v/dine/c/bE1r9dHQ7-w?source=pa&opi=79508299&hl=en-IN&gei=yqfAavKnHMWv4-EPv7qYsQU&ahbb=1" target="_blank" class="nav-item reserve-icon hover-target">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 4H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM16 2v4M8 2v4M2 10h20"/></svg>
+            <span>Book</span>
+        </a>
+        <button class="nav-item hover-target" id="threeDotToggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+            <span>More</span>
+        </button>
+    </nav>
+
+    <!-- Sliding Glass Bottom Sheet for All Settings -->
+    <div class="bottom-sheet" id="bottomSheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-links">
+            <a href="#experience">Experience</a>
+            <a href="#feedback">Guest Feedback</a>
+            <a href="#location">Find Us</a>
+            <a href="tel:07002478916">Call Restaurant</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Dynamic Year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Custom Cursor Logic
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
+            const hoverTargets = document.querySelectorAll('.hover-target, a, button, .feedback-card');
+
+            if (window.matchMedia("(pointer: fine)").matches) {
+                window.addEventListener('mousemove', (e) => {
+                    const posX = e.clientX;
+                    const posY = e.clientY;
+                    
+                    cursorDot.style.left = `${posX}px`;
+                    cursorDot.style.top = `${posY}px`;
+                    
+                    cursorOutline.animate({
+                        left: `${posX}px`,
+                        top: `${posY}px`
+                    }, { duration: 400, fill: "forwards", easing: "ease-out" });
+                });
+
+                hoverTargets.forEach(target => {
+                    target.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                    target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+                });
+            }
+
+            // Mobile Menu Toggle (Top)
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const closeBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.remove('hidden');
+                    mobileMenu.classList.add('flex');
+                    setTimeout(() => mobileMenu.classList.replace('opacity-0', 'opacity-100'), 10);
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.replace('opacity-100', 'opacity-0');
+                    setTimeout(() => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('flex');
+                        document.body.style.overflow = '';
+                    }, 300);
+                }
+            }
+
+            if(mobileBtn) mobileBtn.addEventListener('click', toggleMenu);
+            if(closeBtn) closeBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // Mobile Bottom Sheet Toggle (Bottom 3 dots)
+            const threeDotToggle = document.getElementById('threeDotToggle');
+            const bottomSheet = document.getElementById('bottomSheet');
+            const sheetLinks = document.querySelectorAll('.sheet-links a');
+            let isSheetOpen = false;
+
+            if (threeDotToggle && bottomSheet) {
+                threeDotToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    isSheetOpen = !isSheetOpen;
+                    if (isSheetOpen) {
+                        bottomSheet.classList.add('active');
+                    } else {
+                        bottomSheet.classList.remove('active');
+                    }
+                });
+
+                sheetLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        bottomSheet.classList.remove('active');
+                        isSheetOpen = false;
+                    });
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (isSheetOpen && !bottomSheet.contains(e.target) && !threeDotToggle.contains(e.target)) {
+                        bottomSheet.classList.remove('active');
+                        isSheetOpen = false;
+                    }
+                });
+            }
+
+            // Scroll Reveal via Intersection Observer
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 3D Tilt Logic for Cards and Hero
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            if (window.matchMedia("(min-width: 768px)").matches) {
+                tiltCards.forEach(card => {
+                    card.addEventListener('mousemove', (e) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        const centerX = rect.width / 2;
+                        const centerY = rect.height / 2;
+                        
+                        const rotateX = ((y - centerY) / centerY) * -15;
+                        const rotateY = ((x - centerX) / centerX) * 15;
+                        
+                        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    });
+
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
